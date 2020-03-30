@@ -4,13 +4,17 @@
 
   .country {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     margin: 10px;
 
     .country-name {
       display: flex;
       font-size: x-large;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
     }
 
   }

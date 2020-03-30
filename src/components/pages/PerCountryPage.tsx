@@ -4,6 +4,7 @@ import { toCsv, toJson } from '../../utils/fetch-util'
 import { Population, CountryData } from '../../model/Corona'
 import { lastYearsPopulation, transformCovidCases } from '../../transform/corona'
 import Minigraph from '../Minigraph'
+import ProgressBar from '../ProgressBar'
 
 const urls = {
     poulationPerCountry:
@@ -23,8 +24,8 @@ const PerCountryPage = () => {
         fetch(urls.covidDeathCases).then(toCsv).then(transformCovidCases).then(setDeathCases)
     }, [])
 
-    const merged = useMemo(() => {
-        return deathCases.map((countryData) => {
+    const { merged, maxPerCapita } = useMemo(() => {
+        const merged = deathCases.map((countryData) => {
             const population = populationData.find(({ country }) => country === countryData.name)
             return {
                 ...countryData,
@@ -32,6 +33,8 @@ const PerCountryPage = () => {
                 totalPerCapita: population?.population ? countryData.total / population.population : 0,
             }
         })
+        const maxPerCapita = Math.max(...merged.map((c) => c.totalPerCapita))
+        return { merged, maxPerCapita }
     }, [populationData, deathCases])
 
     useCallback(() => {
@@ -58,8 +61,10 @@ const PerCountryPage = () => {
                         )}`}
                     >
                         <div className="country-name">{country.name}</div>
-                        <div className="deaths-per-capita"></div>
-                        <Minigraph timeline={country.values.slice(-15)} />
+                        <div className="stats">
+                            <ProgressBar width={300} progress={country.totalPerCapita / maxPerCapita} />
+                            <Minigraph timeline={country.values.slice(-15)} />
+                        </div>
                     </div>
                 ))}
         </div>
