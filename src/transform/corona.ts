@@ -1,5 +1,5 @@
 import { transpose } from '../utils/array-util'
-import { DeathCase } from '../model/Corona'
+import { DeathCase, Population } from '../model/Corona'
 
 export const toNumber = (s?: string): number => new Number(s || '').valueOf()
 
@@ -25,3 +25,16 @@ export const transformCovidCases = (csv: string[][]): DeathCase[] => {
         }
     })
 }
+
+/**
+ * Transform world population as given from
+ * https://pkgstore.datahub.io/JohnSnowLabs/population-figures-by-country/population-figures-by-country-csv_json/data/2159fad77778c3b584f3d396593e0af6/population-figures-by-country-csv_json.json
+ */
+export const lastYearsPopulation = (worldPopulation: any): Population[] =>
+    worldPopulation.map((country: any) => {
+        const lastYearKey = Object.keys(country).slice(-1)[0]
+        return {
+            country: country.Country,
+            population: country[lastYearKey],
+        }
+    })

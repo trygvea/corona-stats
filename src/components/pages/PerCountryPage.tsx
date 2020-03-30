@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './PerCountryPage.scss'
 import { toCsv, toJson } from '../../utils/fetch-util'
 import { DeathCase, Population } from '../../model/Corona'
-import { transformCovidCases } from '../../transform/corona'
+import { lastYearsPopulation, transformCovidCases } from '../../transform/corona'
 
 const urls = {
     poulationPerCountry:
@@ -15,7 +15,7 @@ const PerCountryPage = () => {
     const [deathCases, setDeathCases] = useState<DeathCase[]>([])
 
     useEffect(() => {
-        fetch(urls.poulationPerCountry).then(toJson).then(setPopulation)
+        fetch(urls.poulationPerCountry).then(toJson).then(lastYearsPopulation).then(setPopulation)
     }, [])
 
     useEffect(() => {
