@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
 import { toCsv, toJson } from '../../utils/fetch-util'
-import { DeathCase, Population } from '../../model/Corona'
+import { Population, CountryData } from '../../model/Corona'
 import { lastYearsPopulation, transformCovidCases } from '../../transform/corona'
+import Minigraph from '../Minigraph'
 
 const urls = {
     poulationPerCountry:
@@ -11,32 +12,54 @@ const urls = {
 }
 
 const PerCountryPage = () => {
-    const [population, setPopulation] = useState<Population[]>([])
-    const [deathCases, setDeathCases] = useState<DeathCase[]>([])
+    const [populationData, setPopulationData] = useState<Population[]>([])
+    const [deathCases, setDeathCases] = useState<CountryData[]>([])
 
     useEffect(() => {
-        fetch(urls.poulationPerCountry).then(toJson).then(lastYearsPopulation).then(setPopulation)
+        fetch(urls.poulationPerCountry).then(toJson).then(lastYearsPopulation).then(setPopulationData)
     }, [])
 
     useEffect(() => {
         fetch(urls.covidDeathCases).then(toCsv).then(transformCovidCases).then(setDeathCases)
     }, [])
 
+    const merged = useMemo(() => {
+        return deathCases.map((countryData) => {
+            const population = populationData.find(({ country }) => country === countryData.name)
+            return {
+                ...countryData,
+                population: population?.population,
+                totalPerCapita: population?.population ? countryData.total / population.population : 0,
+            }
+        })
+    }, [populationData, deathCases])
+
+    useCallback(() => {
+        const countriesWithoutPopulation = merged.filter((c) => !c.population)
+        if (countriesWithoutPopulation.length > 0) {
+            console.warn(
+                'No population found for the following countries:',
+                countriesWithoutPopulation.map((c) => c.name)
+            )
+        }
+    }, [merged])
+
     return (
         <div className="countries">
-            {deathCases
-                .filter((c) => c.maxDeaths > 0)
-                .sort((a, b) => b.maxDeaths - a.maxDeaths)
+            {merged
+                .filter((c) => c.maxValue > 0)
+                .sort((a, b) => b.totalPerCapita - a.totalPerCapita)
                 .map((country) => (
-                    <div key={country.country} className="country">
-                        <div className="country-name">{country.country}</div>
-                        <div className="minigraph">
-                            {country.deaths.slice(-15).map(({ date, deaths }) => (
-                                <div key={date} className="date" title={`${date}: ${deaths}`}>
-                                    <div className="bar" style={{ height: (deaths / country.maxDeaths) * 30 }}></div>
-                                </div>
-                            ))}
-                        </div>
+                    <div
+                        key={country.name}
+                        className="country"
+                        title={`Total: ${country.total}, per million: ${Math.round(
+                            (country.totalPerCapita || 0) * 1e6
+                        )}`}
+                    >
+                        <div className="country-name">{country.name}</div>
+                        <div className="deaths-per-capita"></div>
+                        <Minigraph timeline={country.values.slice(-15)} />
                     </div>
                 ))}
         </div>

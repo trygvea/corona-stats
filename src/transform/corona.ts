@@ -1,27 +1,29 @@
 import { transpose } from '../utils/array-util'
-import { DeathCase, Population } from '../model/Corona'
+import { CountryData, Population } from '../model/Corona'
+import { sum } from '../utils/number-util'
 
-export const toNumber = (s?: string): number => new Number(s || '').valueOf()
+export const toNumber = (s?: string): number => parseInt(s || '0')
 
 /**
  * Transform the different data from https://covid.ourworldindata.org/data/ecdc
  * to a local structure.
  */
-export const transformCovidCases = (csv: string[][]): DeathCase[] => {
+export const transformCovidCases = (csv: string[][]): CountryData[] => {
     const [firstRow, ...data] = csv
-    const [_, ...countries] = firstRow
+    const [, ...countries] = firstRow
     const rowsWithData = data.filter((row) => row.length > 1)
-    const [dates, ...deathsPerCountry] = transpose(rowsWithData)
+    const [dates, ...valuesPerCountry] = transpose(rowsWithData)
 
     return countries.map((country, i) => {
-        const deaths = deathsPerCountry[i].map((death) => toNumber(death))
+        const values = valuesPerCountry[i].map((stringValue) => toNumber(stringValue))
         return {
-            country,
-            deaths: dates.map((date, j) => ({
+            name: country,
+            values: dates.map((date, j) => ({
                 date,
-                deaths: deaths[j],
+                value: values[j],
             })),
-            maxDeaths: Math.max(...deaths),
+            maxValue: Math.max(...values),
+            total: sum(values),
         }
     })
 }
