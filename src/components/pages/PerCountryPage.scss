@@ -1,0 +1,32 @@
+.countries {
+  display: flex;
+  flex-direction: column;
+
+  .country {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+
+    .country-name {
+      display: flex;
+      font-size: x-large;
+    }
+
+    .minigraph {
+      display: flex;
+      align-items: flex-end;
+
+      .date {
+        flex: none;
+
+        .bar {
+          padding-left: 8px;
+;         margin-left: 2px;
+          background-color: chocolate;
+        }
+      }
+    }
+
+  }
+}
