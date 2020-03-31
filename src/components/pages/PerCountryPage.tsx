@@ -11,7 +11,6 @@ const PerCountryPage = () => {
     return (
         <div className="countries">
             {data
-                .filter((c) => c.maxValue > 0)
                 .sort((a, b) => b.totalPerCapita - a.totalPerCapita)
                 .map((country) => (
                     <div

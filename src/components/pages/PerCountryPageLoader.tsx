@@ -1,40 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
-import { toCsv, toJson } from '../../utils/fetch-util'
+import { toCsv } from '../../utils/fetch-util'
 import { Population, CountryData, Timeline } from '../../model/Corona'
 import { transpose } from '../../utils/array-util'
 import { sum } from '../../utils/number-util'
 import { toNumberOrZero } from '../../utils/string-util'
+import { fetchWorldPopulation, findPopulation } from '../../data/population'
 
 const urls = {
     populationPerCountry:
         'https://pkgstore.datahub.io/JohnSnowLabs/population-figures-by-country/population-figures-by-country-csv_json/data/2159fad77778c3b584f3d396593e0af6/population-figures-by-country-csv_json.json',
     covidDeathCases: 'https://covid.ourworldindata.org/data/ecdc/new_deaths.csv',
-}
-
-const ALTERNATE_COUNTRY_NAMES: { [key: string]: string } = {
-    Brunei: 'Brunei Darussalam',
-    Bahamas: 'Bahamas, The',
-    Congo: 'Congo, Rep.',
-    'Democratic Republic of Congo': 'Congo, Dem. Rep.',
-    Egypt: 'Egypt, Arab Rep.',
-    Eritrea: 'Eritrea',
-    'Faeroe Islands': 'Faroe Islands',
-    Gambia: 'Gambia, The',
-    Iran: 'Iran, Islamic Rep.',
-    Kyrgyzstan: 'Kyrgyz Republic',
-    Laos: 'Lao PDR',
-    Macedonia: 'Macedonia, FYR',
-    Russia: 'Russian Federation',
-    'Saint Kitts and Nevis': 'St. Kitts and Nevis',
-    'Saint Lucia': 'St. Lucia',
-    'Saint Vincent and the Grenadines': 'St. Vincent and the Grenadines',
-    Slovakia: 'Slovak Republic',
-    'South Korea': 'Korea, Dem. People’s Rep.',
-    Syria: 'Syrian Arab Republic',
-    Timor: 'Timor-Leste',
-    Venezuela: 'Venezuela, RB',
-    'United States Virgin Islands': 'Virgin Islands (U.S.)',
 }
 
 /**
@@ -46,31 +22,21 @@ const transformCovidCases = (csv: string[][]): Timeline[] => {
     const rowsWithData = data.filter((row) => row.length > 1)
     const [dates, ...valuesPerCountry] = transpose(rowsWithData)
 
-    return countries.map((country, i) => {
-        const values = valuesPerCountry[i].map((stringValue) => toNumberOrZero(stringValue))
-        return {
-            name: country,
-            values: dates.map((date, j) => ({
-                date,
-                value: values[j],
-            })),
-            maxValue: Math.max(...values),
-            total: sum(values),
-        }
-    })
+    return countries
+        .map((country, i) => {
+            const values = valuesPerCountry[i].map((stringValue) => toNumberOrZero(stringValue))
+            return {
+                name: country,
+                values: dates.map((date, j) => ({
+                    date,
+                    value: values[j],
+                })),
+                maxValue: Math.max(...values),
+                total: sum(values),
+            }
+        })
+        .filter((c) => c.maxValue > 0)
 }
-
-/**
- * Transform world population from weird json struct to local data structure
- */
-const lastYearsPopulation = (worldPopulation: any): Population[] =>
-    worldPopulation.map((country: any) => {
-        const lastYearKey = Object.keys(country).slice(-1)[0]
-        return {
-            country: country.Country,
-            population: country[lastYearKey],
-        }
-    })
 
 const verifyPopulation = (merged: CountryData[], populationData: Population[]): void => {
     const countriesWithoutPopulation = merged.filter((c) => !c.population)
@@ -84,16 +50,6 @@ const verifyPopulation = (merged: CountryData[], populationData: Population[]): 
             populationData.map((c) => c.country)
         )
     }
-}
-
-const findPopulation = (countryName: string, populationData: Population[]): Population | undefined => {
-    const _findPop = (countryName: string) => populationData.find(({ country }) => country === countryName)
-    const population = _findPop(countryName)
-    if (population) {
-        return population
-    }
-    const alternateName = ALTERNATE_COUNTRY_NAMES[countryName]
-    return alternateName ? _findPop(alternateName) : undefined
 }
 
 const addPopulation = (timeline: Timeline[], populationData: Population[]): CountryData[] => {
@@ -114,7 +70,7 @@ export const usePageLoader = (): CountryData[] => {
     const [deathCases, setDeathCases] = useState<Timeline[]>([])
 
     useEffect(() => {
-        fetch(urls.populationPerCountry).then(toJson).then(lastYearsPopulation).then(setPopulationData)
+        fetchWorldPopulation().then(setPopulationData)
     }, [])
 
     useEffect(() => {
