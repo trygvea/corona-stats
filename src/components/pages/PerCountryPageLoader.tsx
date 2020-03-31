@@ -12,6 +12,31 @@ const urls = {
     covidDeathCases: 'https://covid.ourworldindata.org/data/ecdc/new_deaths.csv',
 }
 
+const ALTERNATE_COUNTRY_NAMES: { [key: string]: string } = {
+    Brunei: 'Brunei Darussalam',
+    Bahamas: 'Bahamas, The',
+    Congo: 'Congo, Rep.',
+    'Democratic Republic of Congo': 'Congo, Dem. Rep.',
+    Egypt: 'Egypt, Arab Rep.',
+    Eritrea: 'Eritrea',
+    'Faeroe Islands': 'Faroe Islands',
+    Gambia: 'Gambia, The',
+    Iran: 'Iran, Islamic Rep.',
+    Kyrgyzstan: 'Kyrgyz Republic',
+    Laos: 'Lao PDR',
+    Macedonia: 'Macedonia, FYR',
+    Russia: 'Russian Federation',
+    'Saint Kitts and Nevis': 'St. Kitts and Nevis',
+    'Saint Lucia': 'St. Lucia',
+    'Saint Vincent and the Grenadines': 'St. Vincent and the Grenadines',
+    Slovakia: 'Slovak Republic',
+    'South Korea': 'Korea, Dem. People’s Rep.',
+    Syria: 'Syrian Arab Republic',
+    Timor: 'Timor-Leste',
+    Venezuela: 'Venezuela, RB',
+    'United States Virgin Islands': 'Virgin Islands (U.S.)',
+}
+
 /**
  * Transform corona data from csv file to local data structure
  */
@@ -47,26 +72,40 @@ const lastYearsPopulation = (worldPopulation: any): Population[] =>
         }
     })
 
-const verifyPopulation = (merged: CountryData[]): void => {
+const verifyPopulation = (merged: CountryData[], populationData: Population[]): void => {
     const countriesWithoutPopulation = merged.filter((c) => !c.population)
     if (countriesWithoutPopulation.length > 0) {
         console.warn(
             'No population found for the following countries:',
             countriesWithoutPopulation.map((c) => c.name)
         )
+        console.warn(
+            'You can fix this problem by making a mapping to one of theses:',
+            populationData.map((c) => c.country)
+        )
     }
 }
 
-const decorateTimeline = (timeline: Timeline[], populationData: Population[]): CountryData[] => {
+const findPopulation = (countryName: string, populationData: Population[]): Population | undefined => {
+    const _findPop = (countryName: string) => populationData.find(({ country }) => country === countryName)
+    const population = _findPop(countryName)
+    if (population) {
+        return population
+    }
+    const alternateName = ALTERNATE_COUNTRY_NAMES[countryName]
+    return alternateName ? _findPop(alternateName) : undefined
+}
+
+const addPopulation = (timeline: Timeline[], populationData: Population[]): CountryData[] => {
     const decorated = timeline.map((countryData) => {
-        const population = populationData.find(({ country }) => country === countryData.name)
+        const population = findPopulation(countryData.name, populationData)
         return {
             ...countryData,
             population: population?.population,
             totalPerCapita: population?.population ? countryData.total / population.population : 0,
         }
     })
-    verifyPopulation(decorated)
+    verifyPopulation(decorated, populationData)
     return decorated
 }
 
@@ -83,6 +122,6 @@ export const usePageLoader = (): CountryData[] => {
     }, [])
 
     return useMemo(() => {
-        return decorateTimeline(deathCases, populationData)
+        return addPopulation(deathCases, populationData)
     }, [populationData, deathCases])
 }
