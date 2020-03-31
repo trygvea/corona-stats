@@ -1,20 +1,22 @@
 .countries {
-  display: flex;
-  flex-direction: column;
+
+  thead {
+    text-align: left;
+    th:last-child {
+      text-align: right;
+    }
+  }
 
   .country {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px;
-
     .country-name {
-      display: flex;
       font-size: x-large;
     }
 
-    .stats {
-      display: flex;
-      justify-content: space-between;
+    .deaths-per-capita {
+
+      .progressbar {
+        height: 20px;
+      }
     }
 
   }

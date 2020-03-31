@@ -3,6 +3,7 @@ import { Population } from '../model/Corona'
 
 // NOTE: This service seems to have political issues. For instance it seems to have noe entries for Palestine or Taiwan.
 
+// https://datahub.io/JohnSnowLabs/population-figures-by-country
 const populationUrl =
     'https://pkgstore.datahub.io/JohnSnowLabs/population-figures-by-country/population-figures-by-country-csv_json/data/2159fad77778c3b584f3d396593e0af6/population-figures-by-country-csv_json.json'
 

@@ -1,13 +1,13 @@
 .minigraph {
   display: flex;
   align-items: flex-end;
+  width: 160px;
 
   .date {
-    flex: none;
+    flex: 1;
+    margin-right: 1px;
 
     .bar {
-      padding-left: 8px;;
-      margin-left: 2px;
       background-color: chocolate;
     }
   }
