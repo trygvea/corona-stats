@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
-import { toCsv } from '../../utils/fetch-util'
-import { Population, CountryData, Timeline } from '../../model/Corona'
-import { transpose } from '../../utils/array-util'
-import { sum } from '../../utils/number-util'
-import { toNumberOrZero } from '../../utils/string-util'
-import { fetchWorldPopulation, findPopulation } from '../../data/population'
+import { toCsv } from '../utils/fetch-util'
+import { Population, CountryData, Timeline } from '../model/Corona'
+import { transpose } from '../utils/array-util'
+import { sum } from '../utils/number-util'
+import { toNumberOrZero } from '../utils/string-util'
+import { fetchWorldPopulation, findPopulation } from '../data/population'
 
 const urls = {
     populationPerCountry:
