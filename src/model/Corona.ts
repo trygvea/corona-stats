@@ -10,13 +10,13 @@ export interface TimelineEntry {
 }
 
 export interface Timeline {
+    name: string
     values: TimelineEntry[]
     maxValue: number
     total: number
 }
 
 export interface CountryData extends Timeline {
-    name: string
     population?: number
-    totalPerCapita?: number
+    totalPerCapita: number
 }
