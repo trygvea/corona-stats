@@ -45,10 +45,10 @@ const verifyPopulation = (merged: CountryData[], populationData: Population[]): 
             'No population found for the following countries:',
             countriesWithoutPopulation.map((c) => c.name)
         )
-        console.warn(
-            'You can fix this problem by making a mapping to one of theses:',
-            populationData.map((c) => c.country)
-        )
+        // console.warn(
+        //     'You can fix this problem by making a mapping to one of theses:',
+        //     populationData.map((c) => c.country)
+        // )
     }
 }
 
