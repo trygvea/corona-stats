@@ -1,5 +1,5 @@
 import React from 'react'
-import { CountryData } from '../model/Corona'
+import { CountryData } from '../types/Corona'
 import './PerCountryTable.scss'
 import PerCountryTableRow from './PerCountryTableRow'
 
@@ -16,7 +16,7 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
                 </tr>
                 <tr>
                     <th>Location</th>
-                    <th>per capita</th>
+                    <th>per mill capita</th>
                     <th>per day</th>
                 </tr>
             </thead>

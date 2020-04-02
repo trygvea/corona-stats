@@ -1,5 +1,5 @@
 import { toJson } from '../utils/fetch-util'
-import { Population } from '../model/Corona'
+import { Population } from '../types/Corona'
 
 // NOTE: This service seems to have political issues. For instance it seems to have noe entries for Palestine or Taiwan.
 

@@ -1,7 +1,8 @@
 import React from 'react'
-import { CountryData } from '../model/Corona'
+import { CountryData } from '../types/Corona'
+import { Integer } from '../types/Types'
 
-const formatCompact = (n?: number): string => {
+const formatCompact = (n?: Integer): string => {
     if (!n) {
         return 'unknown'
     }

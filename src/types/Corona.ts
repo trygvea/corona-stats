@@ -1,11 +1,13 @@
+import { Integer, ISODate } from './Types'
+
 export interface Population {
     country: string
-    population: number
-    year: number
+    population: Integer
+    year: Integer
 }
 
 export interface TimelineEntry {
-    date: string
+    date: ISODate
     value: number
 }
 
@@ -17,6 +19,6 @@ export interface Timeline {
 }
 
 export interface CountryData extends Timeline {
-    population?: number
+    population?: Integer
     totalPerCapita: number
 }

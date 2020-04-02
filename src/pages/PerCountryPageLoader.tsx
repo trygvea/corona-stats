@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
 import { toCsv } from '../utils/fetch-util'
-import { Population, CountryData, Timeline } from '../model/Corona'
+import { Population, CountryData, Timeline } from '../types/Corona'
 import { transpose } from '../utils/array-util'
 import { sum } from '../utils/number-util'
 import { toNumberOrZero } from '../utils/string-util'

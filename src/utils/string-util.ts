@@ -1,1 +1,3 @@
-export const toNumberOrZero = (s?: string): number => parseInt(s || '0')
+import { Integer } from '../types/Types'
+
+export const toNumberOrZero = (s?: string): Integer => parseInt(s || '0')
