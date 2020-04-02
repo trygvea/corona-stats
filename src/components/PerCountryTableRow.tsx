@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useContext, useMemo } from 'react'
 import Minigraph from './Minigraph'
 import ProgressBar from './ProgressBar'
-import { CountryData } from '../types/Corona'
+import { accumulateTotals, CountryData, TimelineEntry } from '../types/Corona'
 import { useHover } from '../hooks/hover'
 import CountryHover from './CountryHover'
+import { PerCountryPageContext } from '../pages/PerCountryPage'
+
+const numCols = 40
 
 const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number }> = ({ country, maxPerCapita }) => {
     const [rowRef, isHovered] = useHover()
+    const searchProps = useContext(PerCountryPageContext)
+
+    const deathsTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.values), [country])
 
     return (
         <tr
@@ -28,9 +34,16 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number 
                     <div className="info-small">No population data</div>
                 )}
             </td>
-            <td>
-                <Minigraph timeline={country.values.slice(-40)} barWidth={3} />
-            </td>
+            {searchProps.showDeathsTotal && (
+                <td>
+                    <Minigraph timeline={deathsTotal.slice(-numCols)} barWidth={3} />
+                </td>
+            )}
+            {searchProps.showDeathsNew && (
+                <td>
+                    <Minigraph timeline={country.values.slice(-numCols)} barWidth={3} />
+                </td>
+            )}
         </tr>
     )
 }

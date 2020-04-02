@@ -3,7 +3,9 @@ import { Form, Switch } from 'antd'
 import { PerCountryPageContext } from '../pages/PerCountryPage'
 
 export const SearchPropsDefault = {
-    ignoreTinyCountries: true,
+    showTinyCountries: true,
+    showDeathsNew: true,
+    showDeathsTotal: false,
 }
 
 export type SearchProps = typeof SearchPropsDefault
@@ -17,8 +19,14 @@ const SearchPropsForm: React.FC<{
 
     return (
         <Form>
-            <Form.Item label="Ignore tiny countries">
-                <Switch checked={searchProps.ignoreTinyCountries} onChange={updateProp('ignoreTinyCountries')} />
+            <Form.Item label="Show tiny countries">
+                <Switch checked={searchProps.showTinyCountries} onChange={updateProp('showTinyCountries')} />
+            </Form.Item>
+            <Form.Item label="Show new deaths">
+                <Switch checked={searchProps.showDeathsNew} onChange={updateProp('showDeathsNew')} />
+            </Form.Item>
+            <Form.Item label="Show deaths total">
+                <Switch checked={searchProps.showDeathsTotal} onChange={updateProp('showDeathsTotal')} />
             </Form.Item>
         </Form>
     )

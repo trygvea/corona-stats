@@ -22,3 +22,13 @@ export interface CountryData extends Timeline {
     population?: Integer
     totalPerCapita: number
 }
+
+export const accumulateTotals = (values: TimelineEntry[]): TimelineEntry[] =>
+    values.reduce<TimelineEntry[]>((acc, val, i) => {
+        if (i === 0) {
+            acc.push(val)
+        } else {
+            acc.push({ ...val, value: acc[i - 1].value + val.value })
+        }
+        return acc
+    }, [])

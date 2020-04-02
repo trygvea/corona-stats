@@ -10,7 +10,7 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
     const searchProps = useContext(PerCountryPageContext)
 
     const countryFilter = (country: CountryData): boolean => {
-        if (searchProps.ignoreTinyCountries && (country.population || 0) < 200000) {
+        if (searchProps.showTinyCountries && (country.population || 0) < 200000) {
             return false
         }
         return true
@@ -22,12 +22,14 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
                 <tr>
                     <th></th>
                     <th>Total Deaths</th>
-                    <th>Deaths</th>
+                    {searchProps.showDeathsTotal && <th className="align-right">Deaths</th>}
+                    {searchProps.showDeathsNew && <th className="align-right">Deaths</th>}
                 </tr>
                 <tr>
                     <th>Location</th>
                     <th>per mill capita</th>
-                    <th>per day</th>
+                    {searchProps.showDeathsTotal && <th className="align-right">total</th>}
+                    {searchProps.showDeathsNew && <th className="align-right">per day</th>}
                 </tr>
             </thead>
             <tbody>
