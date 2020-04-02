@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import './PerCountryPage.scss'
 import { usePageLoader } from './PerCountryPageLoader'
 import PerCountryTable from '../components/PerCountryTable'
