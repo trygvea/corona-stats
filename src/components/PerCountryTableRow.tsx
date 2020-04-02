@@ -41,7 +41,7 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number 
             )}
             {searchProps.showDeathsNew && (
                 <td>
-                    <Minigraph timeline={country.values.slice(-numCols)} barWidth={3} />
+                    <Minigraph timeline={country.values.slice(-numCols)} barWidth={3} prefixText={'+'} />
                 </td>
             )}
         </tr>

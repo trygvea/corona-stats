@@ -24,7 +24,10 @@ const PerCountryPage = () => {
                 </p>
 
                 <p className="info-small mbxs">
-                    Using data from <a href="https://ourworldindata.org/coronavirus">ourworldindata.org/coronavirus</a>{' '}
+                    Using data from{' '}
+                    <a href="https://ourworldindata.org/coronavirus-source-data">
+                        ourworldindata.org/coronavirus-source-data
+                    </a>{' '}
                     and{' '}
                     <a href="https://datahub.io/JohnSnowLabs/population-figures-by-country">datahub.io/JohnSnowLabs</a>.
                     <br />
@@ -33,7 +36,7 @@ const PerCountryPage = () => {
                 </p>
 
                 <Button type="primary" onClick={() => setDrawerVisible(true)}>
-                    Change criteria
+                    Configure
                 </Button>
                 <Drawer
                     title="Search details"
@@ -41,6 +44,7 @@ const PerCountryPage = () => {
                     closable={true}
                     onClose={() => setDrawerVisible(false)}
                     visible={drawerVisible}
+                    width={300}
                 >
                     <SearchPropsForm updateSearchProps={setSearchProps} />
                 </Drawer>

@@ -10,7 +10,8 @@ import { fetchWorldPopulation, findPopulation } from '../data/population'
 const urls = {
     populationPerCountry:
         'https://pkgstore.datahub.io/JohnSnowLabs/population-figures-by-country/population-figures-by-country-csv_json/data/2159fad77778c3b584f3d396593e0af6/population-figures-by-country-csv_json.json',
-    covidDeathCases: 'https://covid.ourworldindata.org/data/ecdc/new_deaths.csv',
+    covidNewDeaths: 'https://covid.ourworldindata.org/data/ecdc/new_deaths.csv',
+    covidNewCases: 'https://covid.ourworldindata.org/data/ecdc/new_cases.csv',
 }
 
 /**
@@ -67,17 +68,17 @@ const addPopulation = (timeline: Timeline[], populationData: Population[]): Coun
 
 export const usePageLoader = (): CountryData[] => {
     const [populationData, setPopulationData] = useState<Population[]>([])
-    const [deathCases, setDeathCases] = useState<Timeline[]>([])
+    const [newDeaths, setNewDeaths] = useState<Timeline[]>([])
 
     useEffect(() => {
         fetchWorldPopulation().then(setPopulationData)
     }, [])
 
     useEffect(() => {
-        fetch(urls.covidDeathCases).then(toCsv).then(transformCovidCases).then(setDeathCases)
+        fetch(urls.covidNewDeaths).then(toCsv).then(transformCovidCases).then(setNewDeaths)
     }, [])
 
     return useMemo(() => {
-        return addPopulation(deathCases, populationData)
-    }, [populationData, deathCases])
+        return addPopulation(newDeaths, populationData)
+    }, [populationData, newDeaths])
 }

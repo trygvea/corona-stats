@@ -10,7 +10,7 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
     const searchProps = useContext(PerCountryPageContext)
 
     const countryFilter = (country: CountryData): boolean => {
-        if (searchProps.showTinyCountries && (country.population || 0) < 200000) {
+        if (searchProps.hideTinyCountries && (country.population || 0) < 200000) {
             return false
         }
         return true
