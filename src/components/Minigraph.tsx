@@ -7,6 +7,7 @@ const Minigraph: React.FC<{ timeline: TimelineEntry[]; barWidth?: Integer }> = (
     const maxValue = Math.max(...timeline.map((v) => v.value))
     const lastValue = timeline[timeline.length - 1]
     const barBorder = 1
+    const graphHeight = 40
     const graphWidth = timeline.length * (barWidth + barBorder)
 
     return (
@@ -14,7 +15,7 @@ const Minigraph: React.FC<{ timeline: TimelineEntry[]; barWidth?: Integer }> = (
             <div className="bars" style={{ width: graphWidth }}>
                 {timeline.map(({ date, value }) => (
                     <div key={date} className="date" title={`${date}: ${value}`} style={{ marginRight: barBorder }}>
-                        <div className="bar" style={{ height: maxValue ? (value / maxValue) * 30 : 0 }}></div>
+                        <div className="bar" style={{ height: maxValue ? (value / maxValue) * graphHeight : 0 }}></div>
                     </div>
                 ))}
             </div>
