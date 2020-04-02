@@ -1,25 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Form, Switch } from 'antd'
+import { PerCountryPageContext } from '../pages/PerCountryPage'
 
-export type SearchProps = {
-    ignoreTinyCountries: boolean
-}
-
-export const SearchPropsDefault: SearchProps = {
+export const SearchPropsDefault = {
     ignoreTinyCountries: true,
 }
 
+export type SearchProps = typeof SearchPropsDefault
+
 const SearchPropsForm: React.FC<{
-    searchProps: SearchProps
     updateSearchProps: (p: SearchProps) => void
-}> = ({ searchProps: p, updateSearchProps }) => {
+}> = ({ updateSearchProps }) => {
+    const searchProps = useContext(PerCountryPageContext)
     const updateProp = (prop: keyof SearchProps) => (e: SearchProps[keyof SearchProps]) =>
-        updateSearchProps({ ...p, ...{ [prop]: e } })
+        updateSearchProps({ ...searchProps, ...{ [prop]: e } })
 
     return (
         <Form>
             <Form.Item label="Ignore tiny countries">
-                <Switch checked={p.ignoreTinyCountries} onChange={updateProp('ignoreTinyCountries')} />
+                <Switch checked={searchProps.ignoreTinyCountries} onChange={updateProp('ignoreTinyCountries')} />
             </Form.Item>
         </Form>
     )
