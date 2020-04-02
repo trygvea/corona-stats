@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './PerCountryPage.scss'
 import { usePageLoader } from './PerCountryPageLoader'
 import PerCountryTable from '../components/PerCountryTable'
+import { Button, Drawer } from 'antd'
+import SearchPropsForm, { SearchProps, SearchPropsDefault } from '../components/SearchPropsForm'
 
 const PerCountryPage = () => {
     const countryData = usePageLoader()
+    const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
+    const [searchProps, setSearchProps] = useState<SearchProps>(SearchPropsDefault)
 
     return (
         <div className="per-country-page mll">
@@ -22,6 +26,19 @@ const PerCountryPage = () => {
                 New data from the day before are present every day at 13:00 CET, according to{' '}
                 <a href="https://ourworldindata.org/coronavirus">ourworldindata.org/coronavirus</a>
             </p>
+
+            <Button type="primary" onClick={() => setDrawerVisible(true)}>
+                Edit criteria
+            </Button>
+            <Drawer
+                title="Search details"
+                placement="left"
+                closable={true}
+                onClose={() => setDrawerVisible(false)}
+                visible={drawerVisible}
+            >
+                <SearchPropsForm searchProps={searchProps} updateSearchProps={setSearchProps} />
+            </Drawer>
 
             <PerCountryTable countryData={countryData} />
         </div>
