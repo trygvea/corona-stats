@@ -15,9 +15,26 @@
       }
       .minigraph-hover {
         position: absolute;
-        white-space: nowrap;
-        bottom: 10px;
-        left: -150px;
+        color: darkred;
+        bottom: 1px;
+        left: -70px;
+        text-shadow: 0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa,
+                     0 0 3px #fafafa;
+        //backdrop-filter: blur(1px);
+
+        .value {
+          font-weight: bolder;
+          font-size: larger;
+        }
+        .date {
+          margin-top: -10px;
+        }
       }
     }
   }
@@ -37,13 +54,16 @@
     .bar {
       background-color: chocolate;
       &.hover {
-        background-color: darkred;
+        background-color: sienna;
       }
     }
   }
   &.cases {
     .bar {
       background-color: sienna;
+      &.hover {
+        background-color: chocolate;
+      }
     }
   }
 }

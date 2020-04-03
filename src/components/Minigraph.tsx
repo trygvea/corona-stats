@@ -2,7 +2,6 @@ import React from 'react'
 import { TimelineEntry } from '../types/Corona'
 import './Minigraph.scss'
 import MinigraphBar from './MinigraphBar'
-import { useHover } from '../hooks/hover'
 
 const barBorder = 1
 const barWidth = 3
