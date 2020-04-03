@@ -32,17 +32,12 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
             </td>
             {searchProps.showCasesTotal && (
                 <td>
-                    <Minigraph timeline={casesTotal.slice(-numCols)} barWidth={3} graphClass="cases" />
+                    <Minigraph timeline={casesTotal.slice(-numCols)} graphClass="cases" />
                 </td>
             )}
             {searchProps.showCasesNew && (
                 <td>
-                    <Minigraph
-                        timeline={country.cases.values.slice(-numCols)}
-                        barWidth={3}
-                        graphClass="cases"
-                        prefixText={'+'}
-                    />
+                    <Minigraph timeline={country.cases.values.slice(-numCols)} graphClass="cases" prefixText={'+'} />
                 </td>
             )}
             <td className="deaths-per-capita prl">
@@ -57,17 +52,12 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
             </td>
             {searchProps.showDeathsTotal && (
                 <td>
-                    <Minigraph timeline={deathsTotal.slice(-numCols)} barWidth={3} graphClass="deaths" />
+                    <Minigraph timeline={deathsTotal.slice(-numCols)} graphClass="deaths" />
                 </td>
             )}
             {searchProps.showDeathsNew && (
                 <td>
-                    <Minigraph
-                        timeline={country.deaths.values.slice(-numCols)}
-                        barWidth={3}
-                        graphClass="deaths"
-                        prefixText={'+'}
-                    />
+                    <Minigraph timeline={country.deaths.values.slice(-numCols)} graphClass="deaths" prefixText={'+'} />
                 </td>
             )}
         </tr>

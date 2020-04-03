@@ -1,27 +1,26 @@
 import React from 'react'
 import { TimelineEntry } from '../types/Corona'
 import './Minigraph.scss'
-import { Integer } from '../types/Types'
+import MinigraphBar from './MinigraphBar'
+import { useHover } from '../hooks/hover'
+
+const barBorder = 1
+const barWidth = 3
 
 const Minigraph: React.FC<{
     timeline: TimelineEntry[]
-    barWidth?: Integer
     graphClass: string
     prefixText?: string
-}> = ({ timeline, barWidth = 3, prefixText, graphClass }) => {
+}> = ({ timeline, prefixText, graphClass }) => {
     const maxValue = Math.max(...timeline.map((v) => v.value)) || 0
     const lastValue = timeline[timeline.length - 1]
-    const barBorder = 1
-    const graphHeight = 40
     const graphWidth = timeline.length * (barWidth + barBorder)
 
     return (
         <div className={`minigraph ${graphClass}`}>
             <div className="bars" style={{ width: graphWidth }}>
                 {timeline.map(({ date, value }) => (
-                    <div key={date} className="date" title={`${date}: ${value}`} style={{ marginRight: barBorder }}>
-                        <div className="bar" style={{ height: (value / maxValue) * graphHeight }} />
-                    </div>
+                    <MinigraphBar key={date} date={date} value={value} maxValue={maxValue} barBorder={barBorder} />
                 ))}
             </div>
             <div className="legend">
