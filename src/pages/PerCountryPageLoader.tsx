@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
 import { toCsv } from '../utils/fetch-util'
-import { Population, CountryData, LoadedTimeline } from '../types/Corona'
+import { Population, CountryData, LoadedTimeline, EmptyTimeline } from '../types/Corona'
 import { transpose } from '../utils/array-util'
 import { sum } from '../utils/number-util'
 import { toNumberOrZero } from '../utils/string-util'
@@ -53,15 +53,24 @@ const verifyPopulation = (merged: CountryData[], populationData: Population[]): 
     }
 }
 
-const addPopulation = (allDeaths: LoadedTimeline[], populationData: Population[]): CountryData[] => {
-    const decorated = allDeaths.map((countryDeaths) => {
+const mergeData = (
+    populationData: Population[],
+    newDeaths: LoadedTimeline[],
+    newCases: LoadedTimeline[]
+): CountryData[] => {
+    const decorated = newDeaths.map((countryDeaths) => {
         const population = findPopulation(countryDeaths.countryName, populationData)
+        const countryCases = newCases.find((c) => c.countryName === countryDeaths.countryName) || EmptyTimeline
         return {
             population: population?.population,
             name: countryDeaths.countryName,
             deaths: {
                 ...countryDeaths,
                 totalPerCapita: population?.population ? countryDeaths.total / population.population : 0,
+            },
+            cases: {
+                ...countryCases,
+                totalPerCapita: population?.population ? (countryCases?.total || 0) / population.population : 0,
             },
         }
     })
@@ -72,6 +81,7 @@ const addPopulation = (allDeaths: LoadedTimeline[], populationData: Population[]
 export const usePageLoader = (): CountryData[] => {
     const [populationData, setPopulationData] = useState<Population[]>([])
     const [newDeaths, setNewDeaths] = useState<LoadedTimeline[]>([])
+    const [newCases, setNewCases] = useState<LoadedTimeline[]>([])
 
     useEffect(() => {
         fetchWorldPopulation().then(setPopulationData)
@@ -81,7 +91,11 @@ export const usePageLoader = (): CountryData[] => {
         fetch(urls.covidNewDeaths).then(toCsv).then(transformCovidCases).then(setNewDeaths)
     }, [])
 
+    useEffect(() => {
+        fetch(urls.covidNewCases).then(toCsv).then(transformCovidCases).then(setNewCases)
+    }, [])
+
     return useMemo(() => {
-        return addPopulation(newDeaths, populationData)
-    }, [populationData, newDeaths])
+        return mergeData(populationData, newDeaths, newCases)
+    }, [populationData, newDeaths, newCases])
 }

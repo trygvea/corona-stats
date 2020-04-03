@@ -16,6 +16,7 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
     const searchProps = useContext(PerCountryPageContext)
 
     const deathsTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.deaths.values), [country])
+    const casesTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.cases.values), [country])
 
     return (
         <tr
@@ -29,6 +30,21 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
                 {country.name}
                 {isHovered && <CountryHover country={country} />}
             </td>
+            {searchProps.showCasesTotal && (
+                <td>
+                    <Minigraph timeline={casesTotal.slice(-numCols)} barWidth={3} graphClass="cases" />
+                </td>
+            )}
+            {searchProps.showCasesNew && (
+                <td>
+                    <Minigraph
+                        timeline={country.cases.values.slice(-numCols)}
+                        barWidth={3}
+                        graphClass="cases"
+                        prefixText={'+'}
+                    />
+                </td>
+            )}
             <td className="deaths-per-capita prl">
                 {country.population ? (
                     <div className="deaths-per-capita-bar">
@@ -41,12 +57,17 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
             </td>
             {searchProps.showDeathsTotal && (
                 <td>
-                    <Minigraph timeline={deathsTotal.slice(-numCols)} barWidth={3} />
+                    <Minigraph timeline={deathsTotal.slice(-numCols)} barWidth={3} graphClass="deaths" />
                 </td>
             )}
             {searchProps.showDeathsNew && (
                 <td>
-                    <Minigraph timeline={country.deaths.values.slice(-numCols)} barWidth={3} prefixText={'+'} />
+                    <Minigraph
+                        timeline={country.deaths.values.slice(-numCols)}
+                        barWidth={3}
+                        graphClass="deaths"
+                        prefixText={'+'}
+                    />
                 </td>
             )}
         </tr>

@@ -25,15 +25,19 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
             <thead>
                 <tr>
                     <th></th>
+                    {searchProps.showCasesTotal && <th className="align-center">Cases</th>}
+                    {searchProps.showCasesNew && <th className="align-center">Cases</th>}
                     <th>Total Deaths</th>
-                    {searchProps.showDeathsTotal && <th className="align-right">Deaths</th>}
-                    {searchProps.showDeathsNew && <th className="align-right">Deaths</th>}
+                    {searchProps.showDeathsTotal && <th className="align-center">Deaths</th>}
+                    {searchProps.showDeathsNew && <th className="align-center">Deaths</th>}
                 </tr>
                 <tr>
                     <th>Location</th>
+                    {searchProps.showCasesTotal && <th className="align-center">total</th>}
+                    {searchProps.showCasesNew && <th className="align-center">new</th>}
                     <th>per mill capita</th>
-                    {searchProps.showDeathsTotal && <th className="align-right">total</th>}
-                    {searchProps.showDeathsNew && <th className="align-right">new</th>}
+                    {searchProps.showDeathsTotal && <th className="align-center">total</th>}
+                    {searchProps.showDeathsNew && <th className="align-center">new</th>}
                 </tr>
             </thead>
             <tbody>

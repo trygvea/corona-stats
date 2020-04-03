@@ -29,6 +29,13 @@ export interface CountryData {
     name: string
     population?: Integer
     deaths: PopulationTimeline
+    cases: PopulationTimeline
+}
+
+export const EmptyTimeline: Timeline = {
+    values: [],
+    maxValue: 0,
+    total: 0,
 }
 
 export const accumulateTotals = (values: TimelineEntry[]): TimelineEntry[] =>

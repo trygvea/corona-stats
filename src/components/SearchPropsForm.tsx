@@ -5,7 +5,9 @@ import { PerCountryPageContext } from '../pages/PerCountryPage'
 export const SearchPropsDefault = {
     hideTinyCountries: false,
     showDeathsNew: true,
-    showDeathsTotal: false,
+    showDeathsTotal: true,
+    showCasesNew: false,
+    showCasesTotal: false,
 }
 
 export type SearchProps = typeof SearchPropsDefault
@@ -25,11 +27,17 @@ const SearchPropsForm: React.FC<{
             <Form.Item label="Hide tiny countries">
                 <Switch checked={searchProps.hideTinyCountries} onChange={updateProp('hideTinyCountries')} />
             </Form.Item>
-            <Form.Item label="Show new deaths per day">
+            <Form.Item label="Show new deaths">
                 <Switch checked={searchProps.showDeathsNew} onChange={updateProp('showDeathsNew')} />
             </Form.Item>
-            <Form.Item label="Show total deaths per day">
+            <Form.Item label="Show total deaths">
                 <Switch checked={searchProps.showDeathsTotal} onChange={updateProp('showDeathsTotal')} />
+            </Form.Item>
+            <Form.Item label="Show new cases">
+                <Switch checked={searchProps.showCasesNew} onChange={updateProp('showCasesNew')} />
+            </Form.Item>
+            <Form.Item label="Show total cases">
+                <Switch checked={searchProps.showCasesTotal} onChange={updateProp('showCasesTotal')} />
             </Form.Item>
         </Form>
     )

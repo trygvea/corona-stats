@@ -8,10 +8,6 @@
 
     .date {
       flex: 1;
-
-      .bar {
-        background-color: chocolate;
-      }
     }
   }
 
@@ -23,6 +19,17 @@
 
     .value {
       font-weight: bolder;
+    }
+  }
+
+  &.deaths {
+    .bar {
+      background-color: chocolate;
+    }
+  }
+  &.cases {
+    .bar {
+      background-color: sienna;
     }
   }
 }
