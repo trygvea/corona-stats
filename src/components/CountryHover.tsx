@@ -1,14 +1,6 @@
 import React from 'react'
 import { CountryData } from '../types/Corona'
-import { Integer } from '../types/Types'
-
-const formatCompact = (n?: Integer): string => {
-    if (!n) {
-        return 'unknown'
-    }
-    // @ts-ignore
-    return new Intl.NumberFormat('en-GB', { notation: 'compact', compactDisplay: 'short' }).format(n)
-}
+import { formatCompact } from '../utils/number-util'
 
 const CountryHover: React.FC<{ country: CountryData }> = ({ country }) => {
     return (

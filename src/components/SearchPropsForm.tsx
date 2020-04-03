@@ -1,10 +1,13 @@
 import React, { useContext } from 'react'
 import { Button, Form, Slider, Switch } from 'antd'
 import { PerCountryPageContext } from '../pages/PerCountryPage'
+import './SearchPropsForm.scss'
+import { formatCompact } from '../utils/number-util'
 
 export const SearchPropsDefault = {
     showWorldFirst: false,
     hideTinyCountries: true,
+    tinyCountryLimit: 200000,
     showDeathsNew: true,
     showDeathsTotal: true,
     showCasesNew: false,
@@ -24,13 +27,25 @@ const SearchPropsForm: React.FC<{
         updateSearchProps({ ...searchProps, [prop]: value })
 
     return (
-        <Form>
+        <Form className="search-props-form">
             <Form.Item label="Show world first">
                 <Switch checked={searchProps.showWorldFirst} onChange={updateProp('showWorldFirst')} />
             </Form.Item>
             <Form.Item label="Hide tiny countries">
                 <Switch checked={searchProps.hideTinyCountries} onChange={updateProp('hideTinyCountries')} />
             </Form.Item>
+            <div className="sub-item">
+                <Form.Item label="Smaller than">
+                    <Slider
+                        disabled={!searchProps.hideTinyCountries}
+                        min={0}
+                        max={1000000}
+                        value={searchProps.tinyCountryLimit}
+                        onChange={updateProp('tinyCountryLimit')}
+                        tipFormatter={formatCompact}
+                    />
+                </Form.Item>
+            </div>
             <Form.Item label="Show new deaths">
                 <Switch checked={searchProps.showDeathsNew} onChange={updateProp('showDeathsNew')} />
             </Form.Item>

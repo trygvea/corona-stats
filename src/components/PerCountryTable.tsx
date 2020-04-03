@@ -5,13 +5,11 @@ import PerCountryTableRow from './PerCountryTableRow'
 import { PerCountryPageContext } from '../pages/PerCountryPage'
 
 const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData }) => {
-    const maxDeathsPerCapita = Math.max(...countryData.map((c) => c.deaths.totalPerCapita || 0))
-
     const searchProps = useContext(PerCountryPageContext)
 
     const countryFilter = useCallback(
         (country: CountryData): boolean => {
-            if (searchProps.hideTinyCountries && (country.population || 0) < 200000) {
+            if (searchProps.hideTinyCountries && (country.population || 0) < searchProps.tinyCountryLimit) {
                 return false
             }
             return true
@@ -37,6 +35,10 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
     const countries = useMemo(() => {
         return [...countryData].sort(countrySorter).filter(countryFilter)
     }, [countryData, countryFilter, countrySorter])
+
+    const maxDeathsPerCapita = useMemo(() => {
+        return Math.max(...countries.map((c) => c.deaths.totalPerCapita || 0))
+    }, [countries])
 
     return (
         <table className="countries mtl">
