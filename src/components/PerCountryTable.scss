@@ -12,9 +12,14 @@
   }
   tbody {
     tr {
+      &.the-world {
+        background: aliceblue;
+      }
+
       td {
         padding-top: 2px;
       }
+
 
       .country-name {
         font-size: large;

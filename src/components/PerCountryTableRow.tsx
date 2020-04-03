@@ -6,8 +6,6 @@ import { useHover } from '../hooks/hover'
 import CountryHover from './CountryHover'
 import { PerCountryPageContext } from '../pages/PerCountryPage'
 
-const numCols = 40
-
 const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: number }> = ({
     country,
     maxDeathsPerCapita,
@@ -17,11 +15,13 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: n
 
     const deathsTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.deaths.values), [country])
     const casesTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.cases.values), [country])
+    const numCols = searchProps.numHistoryDays
 
     return (
         <tr
             // @ts-ignore
             ref={rowRef}
+            className={country.name === 'World' ? 'the-world' : ''}
             title={`Total deaths: ${country.deaths.total}, per million: ${Math.round(
                 (country.deaths.totalPerCapita || 0) * 1e6
             )}`}

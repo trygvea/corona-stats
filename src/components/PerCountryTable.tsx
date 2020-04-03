@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { CountryData } from '../types/Corona'
 import './PerCountryTable.scss'
 import PerCountryTableRow from './PerCountryTableRow'
@@ -9,16 +9,34 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
 
     const searchProps = useContext(PerCountryPageContext)
 
-    const countryFilter = (country: CountryData): boolean => {
-        if (searchProps.hideTinyCountries && (country.population || 0) < 200000) {
-            return false
-        }
-        return true
-    }
+    const countryFilter = useCallback(
+        (country: CountryData): boolean => {
+            if (searchProps.hideTinyCountries && (country.population || 0) < 200000) {
+                return false
+            }
+            return true
+        },
+        [searchProps]
+    )
 
-    const countrySorter = (a: CountryData, b: CountryData): number => {
-        return b.deaths.totalPerCapita - a.deaths.totalPerCapita
-    }
+    const countrySorter = useCallback(
+        (a: CountryData, b: CountryData): number => {
+            if (searchProps.showWorldFirst) {
+                if (a.name === 'World') {
+                    return Number.MIN_SAFE_INTEGER
+                }
+                if (b.name === 'World') {
+                    return Number.MAX_SAFE_INTEGER
+                }
+            }
+            return b.deaths.totalPerCapita - a.deaths.totalPerCapita
+        },
+        [searchProps]
+    )
+
+    const countries = useMemo(() => {
+        return [...countryData].sort(countrySorter).filter(countryFilter)
+    }, [countryData, countryFilter, countrySorter])
 
     return (
         <table className="countries mtl">
@@ -41,16 +59,9 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
                 </tr>
             </thead>
             <tbody>
-                {countryData
-                    .sort(countrySorter)
-                    .filter(countryFilter)
-                    .map((country) => (
-                        <PerCountryTableRow
-                            key={country.name}
-                            country={country}
-                            maxDeathsPerCapita={maxDeathsPerCapita}
-                        />
-                    ))}
+                {countries.map((country) => (
+                    <PerCountryTableRow key={country.name} country={country} maxDeathsPerCapita={maxDeathsPerCapita} />
+                ))}
             </tbody>
         </table>
     )
