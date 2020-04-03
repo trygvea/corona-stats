@@ -12,15 +12,23 @@ export interface TimelineEntry {
 }
 
 export interface Timeline {
-    name: string
     values: TimelineEntry[]
     maxValue: number
     total: number
 }
 
-export interface CountryData extends Timeline {
-    population?: Integer
+export interface LoadedTimeline extends Timeline {
+    countryName: string
+}
+
+export interface PopulationTimeline extends Timeline {
     totalPerCapita: number
+}
+
+export interface CountryData {
+    name: string
+    population?: Integer
+    deaths: PopulationTimeline
 }
 
 export const accumulateTotals = (values: TimelineEntry[]): TimelineEntry[] =>

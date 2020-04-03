@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './PerCountryPage.scss'
 import { toCsv } from '../utils/fetch-util'
-import { Population, CountryData, Timeline } from '../types/Corona'
+import { Population, CountryData, LoadedTimeline } from '../types/Corona'
 import { transpose } from '../utils/array-util'
 import { sum } from '../utils/number-util'
 import { toNumberOrZero } from '../utils/string-util'
@@ -17,7 +17,7 @@ const urls = {
 /**
  * Transform corona data from csv file to local data structure
  */
-const transformCovidCases = (csv: string[][]): Timeline[] => {
+const transformCovidCases = (csv: string[][]): LoadedTimeline[] => {
     const [firstRow, ...data] = csv
     const [, ...countries] = firstRow
     const rowsWithData = data.filter((row) => row.length > 1)
@@ -27,7 +27,7 @@ const transformCovidCases = (csv: string[][]): Timeline[] => {
         .map((country, i) => {
             const values = valuesPerCountry[i].map((stringValue) => toNumberOrZero(stringValue))
             return {
-                name: country,
+                countryName: country,
                 values: dates.map((date, j) => ({
                     date,
                     value: values[j],
@@ -53,13 +53,16 @@ const verifyPopulation = (merged: CountryData[], populationData: Population[]): 
     }
 }
 
-const addPopulation = (timeline: Timeline[], populationData: Population[]): CountryData[] => {
-    const decorated = timeline.map((countryData) => {
-        const population = findPopulation(countryData.name, populationData)
+const addPopulation = (allDeaths: LoadedTimeline[], populationData: Population[]): CountryData[] => {
+    const decorated = allDeaths.map((countryDeaths) => {
+        const population = findPopulation(countryDeaths.countryName, populationData)
         return {
-            ...countryData,
             population: population?.population,
-            totalPerCapita: population?.population ? countryData.total / population.population : 0,
+            name: countryDeaths.countryName,
+            deaths: {
+                ...countryDeaths,
+                totalPerCapita: population?.population ? countryDeaths.total / population.population : 0,
+            },
         }
     })
     verifyPopulation(decorated, populationData)
@@ -68,7 +71,7 @@ const addPopulation = (timeline: Timeline[], populationData: Population[]): Coun
 
 export const usePageLoader = (): CountryData[] => {
     const [populationData, setPopulationData] = useState<Population[]>([])
-    const [newDeaths, setNewDeaths] = useState<Timeline[]>([])
+    const [newDeaths, setNewDeaths] = useState<LoadedTimeline[]>([])
 
     useEffect(() => {
         fetchWorldPopulation().then(setPopulationData)

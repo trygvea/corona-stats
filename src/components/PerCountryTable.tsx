@@ -5,7 +5,7 @@ import PerCountryTableRow from './PerCountryTableRow'
 import { PerCountryPageContext } from '../pages/PerCountryPage'
 
 const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData }) => {
-    const maxPerCapita = Math.max(...countryData.map((c) => c.totalPerCapita || 0))
+    const maxDeathsPerCapita = Math.max(...countryData.map((c) => c.deaths.totalPerCapita || 0))
 
     const searchProps = useContext(PerCountryPageContext)
 
@@ -14,6 +14,10 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
             return false
         }
         return true
+    }
+
+    const countrySorter = (a: CountryData, b: CountryData): number => {
+        return b.deaths.totalPerCapita - a.deaths.totalPerCapita
     }
 
     return (
@@ -34,10 +38,14 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
             </thead>
             <tbody>
                 {countryData
-                    .sort((a, b) => b.totalPerCapita - a.totalPerCapita)
+                    .sort(countrySorter)
                     .filter(countryFilter)
                     .map((country) => (
-                        <PerCountryTableRow key={country.name} country={country} maxPerCapita={maxPerCapita} />
+                        <PerCountryTableRow
+                            key={country.name}
+                            country={country}
+                            maxDeathsPerCapita={maxDeathsPerCapita}
+                        />
                     ))}
             </tbody>
         </table>

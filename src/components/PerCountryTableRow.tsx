@@ -8,17 +8,22 @@ import { PerCountryPageContext } from '../pages/PerCountryPage'
 
 const numCols = 40
 
-const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number }> = ({ country, maxPerCapita }) => {
+const PerCountryTableRow: React.FC<{ country: CountryData; maxDeathsPerCapita: number }> = ({
+    country,
+    maxDeathsPerCapita,
+}) => {
     const [rowRef, isHovered] = useHover()
     const searchProps = useContext(PerCountryPageContext)
 
-    const deathsTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.values), [country])
+    const deathsTotal = useMemo<TimelineEntry[]>(() => accumulateTotals(country.deaths.values), [country])
 
     return (
         <tr
             // @ts-ignore
             ref={rowRef}
-            title={`Total: ${country.total}, per million: ${Math.round((country.totalPerCapita || 0) * 1e6)}`}
+            title={`Total deaths: ${country.deaths.total}, per million: ${Math.round(
+                (country.deaths.totalPerCapita || 0) * 1e6
+            )}`}
         >
             <td className="country-name">
                 {country.name}
@@ -27,8 +32,8 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number 
             <td className="deaths-per-capita prl">
                 {country.population ? (
                     <div className="deaths-per-capita-bar">
-                        <ProgressBar width={100} progress={country.totalPerCapita / maxPerCapita} />
-                        <div className="progressbar-overlay">{Math.round(country.totalPerCapita * 1e6)}</div>
+                        <ProgressBar width={100} progress={country.deaths.totalPerCapita / maxDeathsPerCapita} />
+                        <div className="progressbar-overlay">{Math.round(country.deaths.totalPerCapita * 1e6)}</div>
                     </div>
                 ) : (
                     <div className="info-small">No population data</div>
@@ -41,7 +46,7 @@ const PerCountryTableRow: React.FC<{ country: CountryData; maxPerCapita: number 
             )}
             {searchProps.showDeathsNew && (
                 <td>
-                    <Minigraph timeline={country.values.slice(-numCols)} barWidth={3} prefixText={'+'} />
+                    <Minigraph timeline={country.deaths.values.slice(-numCols)} barWidth={3} prefixText={'+'} />
                 </td>
             )}
         </tr>

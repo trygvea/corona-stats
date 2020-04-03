@@ -2,8 +2,7 @@
 
 Using per capita information. 
 
-At the time of writing, no known services do this.
-
+There are a lot of corona statistcs out there, but at the time of writing, a per capita view is not known. 
 
 
 ## Apis used
@@ -15,3 +14,5 @@ Population per country per year:
 New death cases per country per day:
 
     https://covid.ourworldindata.org/data/ecdc/new_deaths.csv    
+    https://covid.ourworldindata.org/data/ecdc/new_cases.csv
+    

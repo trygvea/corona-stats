@@ -13,7 +13,7 @@ const PerCountryPage = () => {
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
     const [searchProps, setSearchProps] = useState<SearchProps>(SearchPropsDefault)
 
-    const lastLoaded = countryData.length > 0 && last(countryData[0].values)?.date
+    const lastLoaded = countryData.length > 0 && last(countryData[0].deaths.values)?.date
 
     const onCloseDrawer = () => setDrawerVisible(false)
 
