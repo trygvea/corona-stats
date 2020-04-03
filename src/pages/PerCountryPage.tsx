@@ -4,6 +4,7 @@ import { usePageLoader } from './PerCountryPageLoader'
 import PerCountryTable from '../components/PerCountryTable'
 import { Button, Drawer } from 'antd'
 import SearchPropsForm, { SearchProps, SearchPropsDefault } from '../components/SearchPropsForm'
+import { last } from '../utils/array-util'
 
 export const PerCountryPageContext = React.createContext(SearchPropsDefault)
 
@@ -12,15 +13,24 @@ const PerCountryPage = () => {
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false)
     const [searchProps, setSearchProps] = useState<SearchProps>(SearchPropsDefault)
 
+    const lastLoaded = countryData.length > 0 && last(countryData[0].values)?.date
+
     return (
         <PerCountryPageContext.Provider value={searchProps}>
-            <div className="per-country-page mll">
-                <h1>Coronavirus - deaths per capita</h1>
+            <div className="per-country-page-header pll">
+                <h1 className="mbs">Coronavirus - deaths per capita</h1>
+                <div className="github-source mam">
+                    <a href="https://github.com/trygvea/corona-stats" target="_blank">
+                        Source on <img src="corona-stats/GitHub-Mark-32px.png" height={24}></img>
+                        <img src="corona-stats/GitHub_Logo.png" height={24}></img>
+                    </a>
+                </div>
+            </div>
 
+            <div className="per-country-page mll mtm">
                 <p className="info-text">
-                    The big countries tend to get all the coronavirus media. But there are many small countries that are
-                    hit much harder than the big. This graph shows coronavirus cases per country ordered by per million
-                    capita.
+                    There are many small countries that are hit much harder than the big countries. This graph shows
+                    coronavirus cases per country ordered per capita.
                 </p>
 
                 <p className="info-small mbxs">
@@ -33,6 +43,8 @@ const PerCountryPage = () => {
                     <br />
                     New data from the day before are present every day at 13:00 CET, according to{' '}
                     <a href="https://ourworldindata.org/coronavirus">ourworldindata.org/coronavirus</a>
+                    <br />
+                    {lastLoaded && `This data was loaded ${lastLoaded}`}
                 </p>
 
                 <Button type="primary" onClick={() => setDrawerVisible(true)}>

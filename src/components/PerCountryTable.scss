@@ -6,11 +6,18 @@
     .align-right {
       text-align: right;
     }
+    tr:last-child {
+      border-bottom: thin solid #aaa;
+    }
   }
   tbody {
     tr {
+      td {
+        padding-top: 2px;
+      }
+
       .country-name {
-        font-size: x-large;
+        font-size: large;
         position: relative;
 
       }
