@@ -29,7 +29,7 @@ const PerCountryTable: React.FC<{ countryData: CountryData[] }> = ({ countryData
                     <th>Location</th>
                     <th>per mill capita</th>
                     {searchProps.showDeathsTotal && <th className="align-right">total</th>}
-                    {searchProps.showDeathsNew && <th className="align-right">per day</th>}
+                    {searchProps.showDeathsNew && <th className="align-right">new</th>}
                 </tr>
             </thead>
             <tbody>

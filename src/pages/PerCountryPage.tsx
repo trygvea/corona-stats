@@ -15,14 +15,16 @@ const PerCountryPage = () => {
 
     const lastLoaded = countryData.length > 0 && last(countryData[0].values)?.date
 
+    const onCloseDrawer = () => setDrawerVisible(false)
+
     return (
         <PerCountryPageContext.Provider value={searchProps}>
             <div className="per-country-page-header pll">
                 <h1 className="mbs">Coronavirus - deaths per capita</h1>
                 <div className="github-source mam">
-                    <a href="https://github.com/trygvea/corona-stats" target="_blank">
-                        Source on <img src="corona-stats/GitHub-Mark-32px.png" height={24}></img>
-                        <img src="corona-stats/GitHub_Logo.png" height={24}></img>
+                    <a href="https://github.com/trygvea/corona-stats" target="_blank" rel="noopener noreferrer">
+                        Source on <img src="corona-stats/GitHub-Mark-32px.png" height={24} alt="github"></img>
+                        <img src="corona-stats/GitHub_Logo.png" height={24} alt="github"></img>
                     </a>
                 </div>
             </div>
@@ -54,11 +56,11 @@ const PerCountryPage = () => {
                     title="Search details"
                     placement="left"
                     closable={true}
-                    onClose={() => setDrawerVisible(false)}
+                    onClose={onCloseDrawer}
                     visible={drawerVisible}
                     width={300}
                 >
-                    <SearchPropsForm updateSearchProps={setSearchProps} />
+                    <SearchPropsForm updateSearchProps={setSearchProps} onCloseDrawer={onCloseDrawer} />
                 </Drawer>
 
                 <PerCountryTable countryData={countryData} />

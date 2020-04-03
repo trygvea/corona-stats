@@ -12,10 +12,13 @@ export type SearchProps = typeof SearchPropsDefault
 
 const SearchPropsForm: React.FC<{
     updateSearchProps: (p: SearchProps) => void
-}> = ({ updateSearchProps }) => {
+    onCloseDrawer?: () => void
+}> = ({ updateSearchProps, onCloseDrawer = () => {} }) => {
     const searchProps = useContext(PerCountryPageContext)
-    const updateProp = (prop: keyof SearchProps) => (e: SearchProps[keyof SearchProps]) =>
+    const updateProp = (prop: keyof SearchProps) => (e: SearchProps[keyof SearchProps]) => {
+        onCloseDrawer()
         updateSearchProps({ ...searchProps, ...{ [prop]: e } })
+    }
 
     return (
         <Form>
