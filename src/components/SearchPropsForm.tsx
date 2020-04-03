@@ -18,7 +18,7 @@ const SearchPropsForm: React.FC<{
 }> = ({ updateSearchProps, onCloseDrawer = () => {} }) => {
     const searchProps = useContext(PerCountryPageContext)
     const updateProp = (prop: keyof SearchProps) => (e: SearchProps[keyof SearchProps]) => {
-        onCloseDrawer()
+        //        onCloseDrawer()
         updateSearchProps({ ...searchProps, ...{ [prop]: e } })
     }
 
