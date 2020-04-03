@@ -8,6 +8,17 @@
 
     .date {
       flex: 1;
+      position: relative;
+
+      .bar{
+
+      }
+      .minigraph-hover {
+        position: absolute;
+        white-space: nowrap;
+        bottom: 10px;
+        left: -150px;
+      }
     }
   }
 
@@ -25,6 +36,9 @@
   &.deaths {
     .bar {
       background-color: chocolate;
+      &.hover {
+        background-color: darkred;
+      }
     }
   }
   &.cases {
