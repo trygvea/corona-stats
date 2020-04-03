@@ -23,8 +23,8 @@ const PerCountryPage = () => {
                 <h1 className="mbs">Coronavirus - deaths per capita</h1>
                 <div className="github-source mam">
                     <a href="https://github.com/trygvea/corona-stats" target="_blank" rel="noopener noreferrer">
-                        Source on <img src="corona-stats/GitHub-Mark-32px.png" height={24} alt="github"></img>
-                        <img src="corona-stats/GitHub_Logo.png" height={24} alt="github"></img>
+                        Source on <img src="/corona-stats/GitHub-Mark-32px.png" height={24} alt="github"></img>
+                        <img src="/corona-stats/GitHub_Logo.png" height={24} alt="github"></img>
                     </a>
                 </div>
             </div>
